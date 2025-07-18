@@ -1,3 +1,6 @@
+
+npx lint-staged
+
 echo "🚫 Scanning for test.only usage..."
 
 # Grep for test.only, describe.only, it.only, etc.
