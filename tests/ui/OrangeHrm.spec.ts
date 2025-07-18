@@ -9,5 +9,5 @@ test.only("OrangeHrm", async ({ page }) => {
                    expect(page).toHaveURL(EnvironmentVariables.PORTAL_BASE_URL);
 
   logger.info(`Navigated to ${page.url()}`);
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(5000);
 });
