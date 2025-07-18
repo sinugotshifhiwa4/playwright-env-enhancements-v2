@@ -7,7 +7,7 @@ import logger from "../../../utils/logger/loggerManager";
 /**
  * Manages base environment file operations including reading, writing, and updating base environment variables
  */
-export class BaseEnvFileManager  {
+export class BaseEnvFileManager {
   public readonly BASE_ENV_FILE = BaseEnvironmentFilePath;
 
   /**
@@ -160,7 +160,7 @@ export class BaseEnvFileManager  {
    * @returns RegExp object for matching and capturing the key's value
    */
   private createKeyValueRegex(keyName: string): RegExp {
-    const escapedKeyName = keyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const escapedKeyName = keyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     return new RegExp(`^${escapedKeyName}=(.*)$`, "m");
   }
 
@@ -199,7 +199,7 @@ export class BaseEnvFileManager  {
    * @returns RegExp object for matching the key
    */
   private createKeyRegex(keyName: string): RegExp {
-    const escapedKeyName = keyName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const escapedKeyName = keyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     return new RegExp(`^${escapedKeyName}=.*$`, "m");
   }
 

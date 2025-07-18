@@ -1,15 +1,8 @@
 // List of valid environment stages as a tuple of string literals
-export const ENVIRONMENT_STAGES = [
-  "dev",
-  "qa",
-  "uat",
-  "preprod",
-  "prod",
-] as const;
+export const ENVIRONMENT_STAGES = ["dev", "qa", "uat", "preprod", "prod"] as const;
 
 // Type alias representing any one of the environment stages
-export type EnvironmentStage = typeof ENVIRONMENT_STAGES[number];
-
+export type EnvironmentStage = (typeof ENVIRONMENT_STAGES)[number];
 
 /**
  * Type guard to check if a given value is a valid EnvironmentStage

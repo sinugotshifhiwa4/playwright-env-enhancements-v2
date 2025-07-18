@@ -526,13 +526,13 @@ export default class FileManager {
     }
   }
 
-public static getFilePath(filePath: string): string {
-  if (!filePath?.trim()) {
-    throw new Error("File path cannot be null, undefined, or empty");
+  public static getFilePath(filePath: string): string {
+    if (!filePath?.trim()) {
+      throw new Error("File path cannot be null, undefined, or empty");
+    }
+
+    return filePath;
   }
-  
-  return filePath;
-}
 
   /**
    * Helper method to get human-readable access mode description
