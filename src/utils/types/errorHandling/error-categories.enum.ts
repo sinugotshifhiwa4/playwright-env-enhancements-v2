@@ -1,0 +1,21 @@
+export enum ErrorCategories {
+  // Runtime environment
+  RUNTIME = "RUNTIME",
+  ENVIRONMENT_AND_DEPENDENCIES = "ENVIRONMENT_AND_DEPENDENCIES",
+  RESOURCES = "RESOURCES",
+
+  // Backend system errors
+  DATABASE = "DATABASE",
+  API_AND_NETWORK = "API_AND_NETWORK",
+  SECURITY_AND_ACCESS = "SECURITY_AND_ACCESS",
+  FILE_SYSTEM = "FILE_SYSTEM",
+
+  // Frontend/UI
+  UI_AND_BROWSER = "UI_AND_BROWSER",
+
+  // Negative tests
+  EXPECTED_FAILURE = "EXPECTED_FAILURE",
+
+  // Fallback
+  UNKNOWN = "UNKNOWN",
+}
