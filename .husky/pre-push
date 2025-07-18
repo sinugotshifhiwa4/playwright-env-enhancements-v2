@@ -1,5 +1,1 @@
-echo '#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-echo "🧪 Checking for test.only (via Playwright)..."
-npx playwright test --forbid-only || exit 1
+npx lint-staged

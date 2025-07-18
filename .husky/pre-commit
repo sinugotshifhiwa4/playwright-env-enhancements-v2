@@ -1,1 +1,9 @@
-npx lint-staged
+echo "🚫 Scanning for test.only usage..."
+
+# Grep for test.only, describe.only, it.only, etc.
+if grep -r --exclude-dir=node_modules --include="*.spec.ts" '\.only(' tests/; then
+  echo "❌ Push blocked: .only found in test files"
+  exit 1
+fi
+
+echo "✅ No test.only usage found. Proceeding with push..."
