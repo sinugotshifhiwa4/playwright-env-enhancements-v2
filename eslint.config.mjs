@@ -29,7 +29,7 @@ const config = tseslint.config(
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-                                                "no-console": "error",
+      "no-console": "error",
       "no-empty-pattern": "off",
 
       // Disable rules
