@@ -1,25 +1,17 @@
 import dotenv from "dotenv";
 import EnvironmentDetector from "../detector/environmentDetector";
 import path from "path";
-import { BaseEnvFileManager } from "./baseEnvFileManager";
-import { StageEnvFileManager } from "./stageEnvFileManager";
+import BaseEnvFileManager from "./baseEnvFileManager";
+import StageEnvFileManager from "./stageEnvFileManager";
 import { EnvironmentFilePaths } from "../../types/environment/environment.constants";
 import ErrorHandler from "../../../utils/errorHandling/errorHandler";
 import type { EnvironmentStage } from "../../types/environment/environment.types";
 import logger from "../../../utils/logger/loggerManager";
 
 export class EnvironmentSetup {
-  private baseEnvFileManager: BaseEnvFileManager;
-  private stageEnvFileManager: StageEnvFileManager;
-
   // Instance state tracking
   public initialized = false;
   private loadedFiles: string[] = [];
-
-  constructor(baseEnvFileManager: BaseEnvFileManager, stageEnvFileManager: StageEnvFileManager) {
-    this.baseEnvFileManager = baseEnvFileManager;
-    this.stageEnvFileManager = stageEnvFileManager;
-  }
 
   public async initialize(): Promise<void> {
     // Skip if already initialized
@@ -70,16 +62,16 @@ export class EnvironmentSetup {
   private async loadBaseEnvironmentFile(): Promise<void> {
     try {
       // Check if the base environment file exists
-      const baseEnvExists = await this.baseEnvFileManager.doesBaseEnvFileExist();
+      const baseEnvExists = await BaseEnvFileManager.doesBaseEnvFileExist();
 
       if (!baseEnvExists) {
-        this.baseEnvFileManager.handleMissingBaseEnvFile();
+        BaseEnvFileManager.handleMissingBaseEnvFile();
         return;
       }
 
       // Load the base environment file
-      this.loadEnvironmentFile(this.baseEnvFileManager.BASE_ENV_FILE);
-      const baseName = path.basename(this.baseEnvFileManager.BASE_ENV_FILE);
+      this.loadEnvironmentFile(BaseEnvFileManager.BASE_ENV_FILE);
+      const baseName = path.basename(BaseEnvFileManager.BASE_ENV_FILE);
       this.loadedFiles.push(baseName);
 
       logger.info(`Successfully loaded base environment file: ${baseName}`);
@@ -87,7 +79,7 @@ export class EnvironmentSetup {
       ErrorHandler.captureError(
         error,
         "loadBaseEnvironmentFile",
-        `Failed to load base environment file at ${this.baseEnvFileManager.BASE_ENV_FILE}`,
+        `Failed to load base environment file at ${BaseEnvFileManager.BASE_ENV_FILE}`,
       );
       throw error;
     }
@@ -111,10 +103,10 @@ export class EnvironmentSetup {
     environmentStage: string,
   ): Promise<boolean> {
     try {
-      const fileExists = await this.stageEnvFileManager.doesEnvironmentFileExist(filePath);
+      const fileExists = await StageEnvFileManager.doesEnvironmentFileExist(filePath);
 
       if (!fileExists) {
-        this.stageEnvFileManager.logEnvironmentFileNotFound(filePath, filePath, environmentStage);
+        StageEnvFileManager.logEnvironmentFileNotFound(filePath, environmentStage);
         return false;
       }
 

@@ -7,32 +7,24 @@ import logger from "../../../utils/logger/loggerManager";
 /**
  * Manages base environment file operations including reading, writing, and updating base environment variables
  */
-export class BaseEnvFileManager {
-  public readonly BASE_ENV_FILE = BaseEnvironmentFilePath;
+export default class BaseEnvFileManager {
+  public static readonly BASE_ENV_FILE = BaseEnvironmentFilePath;
 
   /**
    * Checks if the base environment file exists
    * @param baseEnvFilePath - Path to the base environment file
    * @returns Promise resolving to true if file exists, false otherwise
    */
-  public async doesBaseEnvFileExist(): Promise<boolean> {
+  public static async doesBaseEnvFileExist(): Promise<boolean> {
     return FileManager.doesFileExist(this.BASE_ENV_FILE);
-  }
-
-  /**
-   * Gets the base environment file path
-   * @returns Promise resolving to the base environment file path
-   */
-  public getBaseEnvironmentFilePath(): string {
-    return this.BASE_ENV_FILE;
   }
 
   /**
    * Handles missing base environment file by logging appropriate warnings
    * Skips warnings during key generation operations
    */
-  public handleMissingBaseEnvFile(): void {
-    const isGeneratingKey = (process.env.PLAYWRIGHT_GREP || "").includes("@generate-key");
+  public static handleMissingBaseEnvFile(): void {
+    const isGeneratingKey = (process.env.PLAYWRIGHT_GREP || "").includes("@full-encryption");
 
     // Skip check entirely if generating/storing secret keys
     if (isGeneratingKey) {
@@ -53,7 +45,7 @@ export class BaseEnvFileManager {
    * Reads content from the base environment file or creates it if it doesn't exist
    * @returns Promise resolving to the file content as string
    */
-  public async getOrCreateBaseEnvFileContent(): Promise<string> {
+  public static async getOrCreateBaseEnvFileContent(): Promise<string> {
     try {
       const fileExists = await FileManager.createFile(this.BASE_ENV_FILE);
 
@@ -81,7 +73,7 @@ export class BaseEnvFileManager {
    * @param content - Content to write to the file
    * @param keyName - Name of the key being written (for logging purposes)
    */
-  public async writeSecretKeyVariableToBaseEnvFile(
+  public static async writeSecretKeyVariableToBaseEnvFile(
     content: string,
     keyName: string,
   ): Promise<void> {
@@ -102,7 +94,7 @@ export class BaseEnvFileManager {
    * @param keyName - The name of the environment key to retrieve
    * @returns Promise resolving to the value of the key, or undefined if not found
    */
-  public async getSecretKeyValue(keyName: string): Promise<string | undefined> {
+  public static async getSecretKeyValue(keyName: string): Promise<string | undefined> {
     try {
       const fileContent = await this.getOrCreateBaseEnvFileContent();
       return this.extractKeyValue(fileContent, keyName);
@@ -121,7 +113,7 @@ export class BaseEnvFileManager {
    * @param keyName - The name of the environment key
    * @param value - The value to store for the key
    */
-  public async storeBaseEnvironmentKey(keyName: string, value: string): Promise<void> {
+  public static async storeBaseEnvironmentKey(keyName: string, value: string): Promise<void> {
     try {
       // Get current file content
       const fileContent = await this.getOrCreateBaseEnvFileContent();
@@ -147,7 +139,7 @@ export class BaseEnvFileManager {
    * @param keyName - The key name to extract value for
    * @returns The value of the key, or undefined if not found
    */
-  private extractKeyValue(fileContent: string, keyName: string): string | undefined {
+  private static extractKeyValue(fileContent: string, keyName: string): string | undefined {
     const regex = this.createKeyValueRegex(keyName);
     const match = fileContent.match(regex);
     return match?.[1];
@@ -159,7 +151,7 @@ export class BaseEnvFileManager {
    * @param keyName - The key name to create regex for
    * @returns RegExp object for matching and capturing the key's value
    */
-  private createKeyValueRegex(keyName: string): RegExp {
+  private static createKeyValueRegex(keyName: string): RegExp {
     const escapedKeyName = keyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     return new RegExp(`^${escapedKeyName}=(.*)$`, "m");
   }
@@ -171,7 +163,11 @@ export class BaseEnvFileManager {
    * @param value - The value to set for the key
    * @returns The updated file content
    */
-  private updateOrAddEnvironmentKey(fileContent: string, keyName: string, value: string): string {
+  private static updateOrAddEnvironmentKey(
+    fileContent: string,
+    keyName: string,
+    value: string,
+  ): string {
     const keyExists = this.environmentKeyExists(fileContent, keyName);
 
     if (keyExists) {
@@ -187,7 +183,7 @@ export class BaseEnvFileManager {
    * @param keyName - The key name to look for
    * @returns True if the key exists, false otherwise
    */
-  private environmentKeyExists(fileContent: string, keyName: string): boolean {
+  private static environmentKeyExists(fileContent: string, keyName: string): boolean {
     const regex = this.createKeyRegex(keyName);
     return regex.test(fileContent);
   }
@@ -198,7 +194,7 @@ export class BaseEnvFileManager {
    * @param keyName - The key name to create regex for
    * @returns RegExp object for matching the key
    */
-  private createKeyRegex(keyName: string): RegExp {
+  private static createKeyRegex(keyName: string): RegExp {
     const escapedKeyName = keyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     return new RegExp(`^${escapedKeyName}=.*$`, "m");
   }
@@ -210,7 +206,7 @@ export class BaseEnvFileManager {
    * @param value - The new value for the key
    * @returns Updated file content
    */
-  private updateExistingEnvironmentKey(
+  private static updateExistingEnvironmentKey(
     fileContent: string,
     keyName: string,
     value: string,
@@ -228,7 +224,7 @@ export class BaseEnvFileManager {
    * @param value - The value for the new key
    * @returns Updated file content with the new key
    */
-  private addNewEnvironmentKey(fileContent: string, keyName: string, value: string): string {
+  private static addNewEnvironmentKey(fileContent: string, keyName: string, value: string): string {
     let updatedContent = fileContent;
 
     // Ensure file ends with newline before adding new key

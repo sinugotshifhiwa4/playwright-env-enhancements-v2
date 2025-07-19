@@ -1,21 +1,10 @@
-/***
- * ESLint configuration for Playwright + TypeScript test automation framework.
- *
- * Includes:
- * - ESLint + TypeScript linting with @typescript-eslint
- * - Prettier integration to handle formatting
- * - Relaxed rules for test files
- * - Scoped configuration for .ts/.tsx only
- * - Ignores for generated/output folders and declaration files
- */
-
 import tseslint from "typescript-eslint";
 import prettierConfig from "eslint-config-prettier";
 
 const config = tseslint.config(
   ...tseslint.configs.recommended.map((config) => ({
     ...config,
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ["**/*.ts"],
   })),
 
   {
@@ -41,6 +30,27 @@ const config = tseslint.config(
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-return": "warn",
+
+      // Enhanced TypeScript rules for better code quality
+      "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/prefer-nullish-coalescing": "error",
+      "@typescript-eslint/no-unnecessary-type-assertion": "error",
+      "@typescript-eslint/prefer-optional-chain": "error",
+      "@typescript-eslint/no-non-null-assertion": "warn",
+      "@typescript-eslint/prefer-as-const": "error",
+      "@typescript-eslint/no-redundant-type-constituents": "warn",
+      "@typescript-eslint/prefer-string-starts-ends-with": "error",
+      "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+      "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
+
+      // General code quality improvements
+      "prefer-const": "error",
+      "no-var": "error",
+      eqeqeq: ["error", "always", { null: "ignore" }],
+      "no-duplicate-imports": "error",
+      "no-unused-expressions": "error",
+      "prefer-template": "error",
+      "object-shorthand": "error",
     },
   },
 
@@ -54,6 +64,11 @@ const config = tseslint.config(
       "@typescript-eslint/no-unsafe-call": "off",
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-explicit-any": "off",
+
+      // Relax some strict rules for test files but keep important ones
+      "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-unnecessary-type-assertion": "off",
     },
   },
 
@@ -65,7 +80,7 @@ const config = tseslint.config(
       "playwright-report/**",
       "ortoni-report/**",
       "dist/**",
-      "*.d.ts",
+      "build/**",
     ],
   },
 

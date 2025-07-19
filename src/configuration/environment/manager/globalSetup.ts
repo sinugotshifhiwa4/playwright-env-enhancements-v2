@@ -1,14 +1,10 @@
-import { BaseEnvFileManager } from "./baseEnvFileManager";
-import { StageEnvFileManager } from "./stageEnvFileManager";
 import { EnvironmentSetup } from "../manager/environmentSetup";
 import ErrorHandler from "../../../utils/errorHandling/errorHandler";
 
 async function initializeEnvironment(): Promise<void> {
   try {
-    // Initialize the environment setup manager
-    const baseEnvFileManager = new BaseEnvFileManager();
-    const stageEnvFileManager = new StageEnvFileManager();
-    const environmentSetup = new EnvironmentSetup(baseEnvFileManager, stageEnvFileManager);
+    // Initialize the environment setup
+    const environmentSetup = new EnvironmentSetup();
     await environmentSetup.initialize();
   } catch (error) {
     ErrorHandler.captureError(error, "initializeEnvironment", "Environment initialization failed");
