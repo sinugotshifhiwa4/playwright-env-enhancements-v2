@@ -69,7 +69,6 @@ const config = tseslint.config(
       "logs/**",
       "playwright-report/**",
       "dist/**",
-      "*.ts",
     ],
   },
 

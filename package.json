@@ -69,8 +69,12 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{json,md,yml,yaml}": [
+    "*.{json,yml,yaml}": [
       "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write --prose-wrap always",
+      "git add"
     ]
   },
   "keywords": [],

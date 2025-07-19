@@ -1,13 +1,16 @@
 ## Git Hooks with Husky
 
-This project uses **[Husky](https://typicode.github.io/husky)**, **Lint-Staged**, **ESLint**, and **Prettier** to ensure consistent code quality and formatting before any changes are committed or pushed.
+This project uses **[Husky](https://typicode.github.io/husky)**, **Lint-Staged**, **ESLint**, and
+**Prettier** to ensure consistent code quality and formatting before any changes are committed or
+pushed.
 
 To set up Husky, [follow this guide](https://typicode.github.io/husky/get-started.html).
 
 - Husky hook scripts are located in the `.husky/` directory.
 - `lint-staged` configuration is defined in `package.json`.
 
-This setup ensures only **staged files** are linted and formatted, keeping the workflow fast and efficient.
+This setup ensures only **staged files** are linted and formatted, keeping the workflow fast and
+efficient.
 
 ---
 
@@ -22,7 +25,7 @@ This setup ensures only **staged files** are linted and formatted, keeping the w
 
 ### Included Hooks
 
-                         #### Pre-commit
+#### Pre-commit
 
 Runs automatically before a commit and:
 
