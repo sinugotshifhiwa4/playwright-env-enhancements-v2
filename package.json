@@ -28,9 +28,6 @@
   "scripts": {
     "type:check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.js",
-    "lint:fix": "eslint . --ext .ts,.js --fix",
-    "format:check": "prettier --check .",
-    "format": "prettier --write .",
     "check:all": "npm run type:check && npm run lint",
     "pretest:encryption:dev": "npm run check:all",
     "pretest:encryption:uat": "npm run check:all",
@@ -68,11 +65,12 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts}": [
-      "npm run format"
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
     ],
     "*.{json,md,yml,yaml}": [
-      "npm run format"
+      "prettier --write"
     ]
   },
   "keywords": [],
