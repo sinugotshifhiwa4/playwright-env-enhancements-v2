@@ -27,7 +27,7 @@ export default defineConfig({
   grep:
     typeof process.env.PLAYWRIGHT_GREP === "string"
       ? new RegExp(process.env.PLAYWRIGHT_GREP)
-      : process.env.PLAYWRIGHT_GREP || /.*/,
+      : (process.env.PLAYWRIGHT_GREP ?? /.*/),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */

@@ -3,10 +3,10 @@ import EnvironmentVariables from "../../src/configuration/environment/variables/
 import logger from "../../src/utils/logger/loggerManager";
 
 test("OrangeHrm", async ({ page }) => {
-  await page.goto(EnvironmentVariables.PORTAL_BASE_URL);
+  await page.goto(EnvironmentVariables.PORTAL_BASE_URL!);
 
-  expect(page).toHaveTitle("OrangeHRM");
-  expect(page).toHaveURL(EnvironmentVariables.PORTAL_BASE_URL);
+  await expect(page).toHaveTitle("OrangeHRM");
+  await expect(page).toHaveURL(EnvironmentVariables.PORTAL_BASE_URL!);
 
   logger.info(`Navigated to ${page.url()}`);
   await page.waitForTimeout(2000);

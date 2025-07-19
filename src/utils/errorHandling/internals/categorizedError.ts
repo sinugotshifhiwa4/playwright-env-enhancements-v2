@@ -7,7 +7,7 @@ export class CategorizedError extends Error {
     public readonly context: string = "Categorized Error",
     message?: string,
   ) {
-    super(message || CategorizedError.getDefaultMessage(category));
+    super(message ?? CategorizedError.getDefaultMessage(category));
     this.name = "CategorizedError";
     Object.setPrototypeOf(this, CategorizedError.prototype);
   }
@@ -25,7 +25,7 @@ export class CategorizedError extends Error {
       [ErrorCategories.UNKNOWN]: "Unknown error, error was not categorized",
     };
 
-    return defaultMessages[category] || `Error (Category: ${category})`;
+    return defaultMessages[category] ?? `Error (Category: ${category})`;
   }
 
   toJSON(): Record<string, unknown> {

@@ -40,7 +40,7 @@ export default class PositiveValidatorUtil {
    */
   private static validateStatusCode(actual: number, expected: number, context: string): void {
     const expectation = ApiTestExpectation.getExpectation(context);
-    const registeredExpectedCodes = expectation?.expectedStatusCodes || [];
+    const registeredExpectedCodes = expectation?.expectedStatusCodes ?? [];
 
     if (registeredExpectedCodes.length > 0) {
       this.validateAgainstRegisteredExpectations(

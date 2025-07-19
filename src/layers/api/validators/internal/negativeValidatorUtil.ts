@@ -54,7 +54,7 @@ export default class NegativeValidatorUtil {
     logger.info(`Null response received as expected for negative test [${context}]`);
 
     const expectation = ApiTestExpectation.getExpectation(context);
-    const expectedCodes = expectation?.expectedStatusCodes || [];
+    const expectedCodes = expectation?.expectedStatusCodes ?? [];
 
     if (expectedCodes.length > 0) {
       logger.warn(
@@ -95,7 +95,7 @@ export default class NegativeValidatorUtil {
     }
 
     const expectation = ApiTestExpectation.getExpectation(context);
-    const registeredExpectedCodes = expectation?.expectedStatusCodes || [];
+    const registeredExpectedCodes = expectation?.expectedStatusCodes ?? [];
 
     const errorMessage = `Negative test [${context}] status validation failed - Expected: [${registeredExpectedCodes.join(" or ")}], Received: ${actual}`;
     logger.error(errorMessage);
@@ -117,7 +117,7 @@ export default class NegativeValidatorUtil {
    */
   private static handleNegativeTestResponse(status: number, context: string): void {
     const expectation = ApiTestExpectation.getExpectation(context);
-    const expectedCodes = expectation?.expectedStatusCodes || [];
+    const expectedCodes = expectation?.expectedStatusCodes ?? [];
     const errorMessage = `Negative test [${context}] status code mismatch - Expected: [${expectedCodes.join(" or ")}], Received: ${status}`;
 
     logger.error(errorMessage, {
@@ -149,7 +149,7 @@ export default class NegativeValidatorUtil {
     }
 
     const expectation = ApiTestExpectation.getExpectation(context);
-    const expectedCodes = expectation?.expectedStatusCodes || [];
+    const expectedCodes = expectation?.expectedStatusCodes ?? [];
 
     if (expectedCodes.length === 0) {
       logger.warn(
@@ -210,7 +210,7 @@ export default class NegativeValidatorUtil {
   private static handleAxiosErrorInNegativeTest(error: AxiosError, context: string): boolean {
     const actualStatus = error.response!.status;
     const expectation = ApiTestExpectation.getExpectation(context);
-    const registeredExpectedCodes = expectation?.expectedStatusCodes || [];
+    const registeredExpectedCodes = expectation?.expectedStatusCodes ?? [];
 
     logger.info(`Handling AxiosError in negative test [${context}] with status: ${actualStatus}`);
 
@@ -304,8 +304,8 @@ export default class NegativeValidatorUtil {
         actualTestType: "positive",
         expectedTestType: "negative",
         testExpectation: {
-          expectedStatusCodes: expectation?.expectedStatusCodes || [],
-          isNegativeTest: expectation?.isNegativeTest || false,
+          expectedStatusCodes: expectation?.expectedStatusCodes ?? [],
+          isNegativeTest: expectation?.isNegativeTest ?? false,
         },
         message: "Context is registered as positive test but being validated as negative test",
       });

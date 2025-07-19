@@ -68,11 +68,10 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,js}": [
-      "npm run lint:fix",
+    "*.{ts}": [
       "npm run format"
     ],
-    "*.{json,md, yml,yaml}": [
+    "*.{json,md,yml,yaml}": [
       "npm run format"
     ]
   },

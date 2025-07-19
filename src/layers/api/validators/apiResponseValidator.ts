@@ -53,8 +53,8 @@ export default class ApiResponseValidator {
         registeredType: actualTestType,
         forcedType: forceTestType,
         testExpectation: {
-          expectedStatusCodes: expectation?.expectedStatusCodes || [],
-          isNegativeTest: expectation?.isNegativeTest || false,
+          expectedStatusCodes: expectation?.expectedStatusCodes ?? [],
+          isNegativeTest: expectation?.isNegativeTest ?? false,
         },
         message: `Context is registered as ${actualTestType} test but validation requested as ${forceTestType}`,
       });

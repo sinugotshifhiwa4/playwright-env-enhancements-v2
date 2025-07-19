@@ -29,11 +29,11 @@ export default class ErrorAnalyzer {
 
     return {
       source,
-      context: context || analysis.context,
+      context: context ?? analysis.context,
       message: this.getErrorMessage(error),
       category: analysis.category,
       timestamp: new Date().toISOString(),
-      environment: process.env.ENV || "dev",
+      environment: process.env.ENV ?? "dev",
       version: process.env.APP_VERSION,
       statusCode: this.extractHttpStatus(error),
     };
@@ -94,7 +94,7 @@ export default class ErrorAnalyzer {
 
     // Handle Axios errors specifically
     if (this.isAxiosError(error)) {
-      return (error as AxiosError).response?.status;
+      return error.response?.status;
     }
 
     // Check for response.status (axios-style and similar)
@@ -114,7 +114,7 @@ export default class ErrorAnalyzer {
     const statusProps = ["status", "statusCode"];
     for (const prop of statusProps) {
       if (prop in errorObj && typeof errorObj[prop] === "number") {
-        return errorObj[prop] as number;
+        return errorObj[prop];
       }
     }
 
@@ -163,7 +163,7 @@ export default class ErrorAnalyzer {
       return {};
     }
 
-    const axiosError = error as AxiosError;
+    const axiosError = error;
     const info: Record<string, unknown> = {};
 
     if (axiosError.config?.url) {
@@ -276,7 +276,7 @@ export default class ErrorAnalyzer {
     if (error instanceof CategorizedError) {
       return {
         category: error.category,
-        context: error.context || "Categorized Error",
+        context: error.context ?? "Categorized Error",
       };
     }
 

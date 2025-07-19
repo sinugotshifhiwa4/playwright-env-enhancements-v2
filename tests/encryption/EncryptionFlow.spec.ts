@@ -8,8 +8,8 @@ test.describe.serial("Encryption Flow @full-encryption", () => {
 
   test("Encrypt environment variables", async ({ cryptoOrchestrator, encryptionValidator }) => {
     await cryptoOrchestrator.encryptEnvironmentVariables([
-      EnvironmentVariables.PORTAL_USERNAME,
-      EnvironmentVariables.PORTAL_PASSWORD,
+      EnvironmentVariables.PORTAL_USERNAME!,
+      EnvironmentVariables.PORTAL_PASSWORD!,
     ]);
 
     // Verify encryption

@@ -430,14 +430,19 @@ export class CryptoManager {
     receivedHmac: string,
     hmacKey: CryptoKey,
   ): Promise<void> {
-    const dataToHmac = CryptoManager.prepareHMACData(salt, iv, cipherText);
-    const computedHmac = await CryptoManager.computeHMAC(hmacKey, dataToHmac);
+    try {
+      const dataToHmac = CryptoManager.prepareHMACData(salt, iv, cipherText);
+      const computedHmac = await CryptoManager.computeHMAC(hmacKey, dataToHmac);
 
-    if (!CryptoManager.constantTimeCompare(computedHmac, receivedHmac)) {
-      ErrorHandler.logAndThrow(
-        "Authentication failed: HMAC mismatch - Invalid key or tampered data",
-        "CryptoManager.verifyHMAC",
-      );
+      if (!CryptoManager.constantTimeCompare(computedHmac, receivedHmac)) {
+        ErrorHandler.logAndThrow(
+          "Authentication failed: HMAC mismatch - Invalid key or tampered data",
+          "CryptoManager.verifyHMAC",
+        );
+      }
+    } catch (error) {
+      ErrorHandler.captureError(error, "verifyHMAC", "Failed to verify HMAC.");
+      throw error;
     }
   }
 

@@ -31,7 +31,7 @@ export default class ApiTestExpectation {
    */
   public static isExpectedStatus(contextKey: string, statusCode: number): boolean {
     const expectation = this.expectations.get(contextKey);
-    return expectation?.expectedStatusCodes.includes(statusCode) || false;
+    return expectation?.expectedStatusCodes.includes(statusCode) ?? false;
   }
 
   /**
@@ -40,7 +40,7 @@ export default class ApiTestExpectation {
    * @returns True if this context is registered as a negative test
    */
   public static isNegativeTest(contextKey: string): boolean {
-    return this.expectations.get(contextKey)?.isNegativeTest || false;
+    return this.expectations.get(contextKey)?.isNegativeTest ?? false;
   }
 
   /**
@@ -166,6 +166,6 @@ export default class ApiTestExpectation {
    * @returns The expectation object or null if not found
    */
   public static getExpectation(contextKey: string): TestExpectation | null {
-    return this.expectations.get(contextKey) || null;
+    return this.expectations.get(contextKey) ?? null;
   }
 }

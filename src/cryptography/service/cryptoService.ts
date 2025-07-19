@@ -52,7 +52,7 @@ export class CryptoService {
         salt,
       );
 
-      CryptoManager.verifyHMAC(salt, iv, cipherText, receivedHmac, hmacKey);
+      await CryptoManager.verifyHMAC(salt, iv, cipherText, receivedHmac, hmacKey);
 
       const decryptedBuffer = await CryptoManager.performDecryption(iv, encryptionKey, cipherText);
 

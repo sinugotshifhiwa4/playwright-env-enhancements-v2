@@ -1,5 +1,5 @@
-import type { EnvironmentStage } from "../../types/environment/environment.types";
 import { isEnvironmentStage } from "../../types/environment/environment.types";
+import type { EnvironmentStage } from "../../types/environment/environment.types";
 
 export default class EnvironmentDetector {
   /**
@@ -7,18 +7,18 @@ export default class EnvironmentDetector {
    */
   public static isCI(): boolean {
     return !!(
-      process.env.CI ||
-      process.env.GITHUB_ACTIONS ||
-      process.env.GITLAB_CI ||
-      process.env.TRAVIS ||
-      process.env.CIRCLECI ||
-      process.env.JENKINS_URL ||
+      process.env.CI ??
+      process.env.GITHUB_ACTIONS ??
+      process.env.GITLAB_CI ??
+      process.env.TRAVIS ??
+      process.env.CIRCLECI ??
+      process.env.JENKINS_URL ??
       process.env.BITBUCKET_BUILD_NUMBER
     );
   }
 
   public static getCurrentEnvironmentStage(): EnvironmentStage {
-    const env = process.env.ENV || process.env.NODE_ENV || "dev";
+    const env = process.env.ENV ?? process.env.NODE_ENV ?? "dev";
     return isEnvironmentStage(env) ? env : "dev";
   }
 

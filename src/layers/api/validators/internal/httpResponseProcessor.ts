@@ -188,7 +188,7 @@ export default class HttpResponseProcessor {
    */
   public static validateHttpStatus(response: AxiosResponse): void {
     if (response.status >= 400) {
-      const errorData = response.data || {};
+      const errorData = response.data ?? {};
       const {
         code = "UNKNOWN_CODE",
         type = "UNKNOWN_TYPE",

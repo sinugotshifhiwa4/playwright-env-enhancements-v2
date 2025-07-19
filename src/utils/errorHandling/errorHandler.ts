@@ -23,7 +23,7 @@ export default class ErrorHandler {
       const cacheKey = generateLoggedErrorCacheKey(
         details.source,
         details.category,
-        details.statusCode || 0,
+        details.statusCode ?? 0,
         details.message,
       );
 

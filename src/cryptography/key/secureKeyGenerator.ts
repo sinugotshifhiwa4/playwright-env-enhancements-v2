@@ -66,8 +66,8 @@ export default class SecureKeyGenerator {
   private static isWebCryptoAvailable(): boolean {
     return (
       typeof globalThis !== "undefined" &&
-      typeof globalThis.crypto !== "undefined" &&
-      typeof globalThis.crypto.subtle !== "undefined" &&
+      typeof globalThis?.crypto &&
+      typeof globalThis.crypto?.subtle &&
       typeof globalThis.crypto.getRandomValues === "function"
     );
   }

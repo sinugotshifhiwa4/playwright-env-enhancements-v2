@@ -363,7 +363,7 @@ export default class FileManager {
     if (!statsResult.success || !statsResult.data) {
       return {
         success: false,
-        error: statsResult.error || new Error("Failed to get file stats"),
+        error: statsResult.error ?? new Error("Failed to get file stats"),
       };
     }
 

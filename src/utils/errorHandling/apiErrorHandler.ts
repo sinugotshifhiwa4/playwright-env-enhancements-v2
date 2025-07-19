@@ -48,7 +48,7 @@ export default class ApiErrorHandler {
     const errorMessage = ErrorAnalyzer.getErrorMessage(error);
 
     logger.info(
-      `Expected API error in negative test at [${source}]: Status Code ${statusCode || "Unknown"} — ${errorMessage.substring(0, 100)}... — Test validation passed.`,
+      `Expected API error in negative test at [${source}]: Status Code ${statusCode ?? "Unknown"} — ${errorMessage.substring(0, 100)}... — Test validation passed.`,
     );
   }
 
@@ -70,7 +70,7 @@ export default class ApiErrorHandler {
     return {
       message: errorDetails.message,
       category: errorDetails.category,
-      statusCode: errorDetails.statusCode || 0,
+      statusCode: errorDetails.statusCode ?? 0,
       details: ErrorAnalyzer.extractAdditionalErrorDetails(error),
     };
   }
@@ -95,7 +95,7 @@ export default class ApiErrorHandler {
       return statusForCategory;
     }
 
-    return defaultStatusCode || 500;
+    return defaultStatusCode ?? 500;
   }
 
   /**
