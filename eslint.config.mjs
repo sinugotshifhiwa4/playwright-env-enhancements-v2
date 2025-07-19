@@ -3,13 +3,14 @@ import prettierConfig from "eslint-config-prettier";
 import path from "path";
 import { fileURLToPath } from "url";
 
+// Get the directory of the current file
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config = tseslint.config(
   ...tseslint.configs.recommended,
 
   {
-    files: ["**/*.ts", "**/*.mjs"],
+    files: ["**/*.ts"],
     languageOptions: {
       parserOptions: {
         project: true,
@@ -18,7 +19,7 @@ const config = tseslint.config(
     },
     rules: {
       // Variable handling
-                                            "@typescript-eslint/no-unused-vars": [
+      "@typescript-eslint/no-unused-vars": [
         "error",
         {
           argsIgnorePattern: "^_",
@@ -26,14 +27,14 @@ const config = tseslint.config(
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      
+
       // Code quality
       "no-console": "error",
       "no-empty-pattern": "off",
-      
+
       // Type safety - now enabled for better type checking
       "@typescript-eslint/no-unsafe-member-access": "error",
-      "@typescript-eslint/no-unsafe-assignment": "error", 
+      "@typescript-eslint/no-unsafe-assignment": "error",
       "@typescript-eslint/no-unsafe-return": "error",
       "@typescript-eslint/no-unsafe-call": "error",
       "@typescript-eslint/no-unsafe-argument": "error",
@@ -64,7 +65,7 @@ const config = tseslint.config(
   {
     ignores: [
       "src/testData/**",
-      "node_modules/**", 
+      "node_modules/**",
       "logs/**",
       "playwright-report/**",
       "dist/**",
