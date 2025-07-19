@@ -1,3 +1,5 @@
+# Demo Project
+
 ## Git Hooks with Husky
 
 This project uses **[Husky](https://typicode.github.io/husky)**, **Lint-Staged**, **ESLint**, and
@@ -25,7 +27,7 @@ efficient.
 
 ### Included Hooks
 
-#### Pre-commit
+          #### Pre-commit
 
 Runs automatically before a commit and:
 
