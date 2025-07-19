@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const config = tseslint.config(
   ...tseslint.configs.recommended.map((config) => ({
     ...config,
-    files: ["**/*.ts", "**/*.tsx"],
+    files: ["**/*.ts"],
   })),
 
   {
@@ -29,7 +29,7 @@ const config = tseslint.config(
           caughtErrorsIgnorePattern: "^_",
         },
       ],
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+                                                "no-console": "error",
       "no-empty-pattern": "off",
 
       // Disable rules
