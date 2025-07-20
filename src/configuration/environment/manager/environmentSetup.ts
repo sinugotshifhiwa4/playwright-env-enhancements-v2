@@ -70,7 +70,7 @@ export class EnvironmentSetup {
       }
 
       // Load the base environment file
-      this.loadEnvironmentFile(BaseEnvFileManager.BASE_ENV_FILE);
+      this.loadEnvironment(BaseEnvFileManager.BASE_ENV_FILE);
       const baseName = path.basename(BaseEnvFileManager.BASE_ENV_FILE);
       this.loadedFiles.push(baseName);
 
@@ -89,7 +89,7 @@ export class EnvironmentSetup {
    * Loads environment-specific configuration
    */
   private async loadEnvironmentStages(): Promise<void> {
-    const env = this.getCurrentEnvironmentStage();
+    const env = EnvironmentDetector.getCurrentEnvironmentStage();
     const stageEnvironmentFilePath = EnvironmentFilePaths[env];
     await this.loadStageEnvironmentFile(stageEnvironmentFilePath, env);
   }
@@ -112,7 +112,7 @@ export class EnvironmentSetup {
 
       // Load the environment file
       const baseName = path.basename(filePath);
-      this.loadEnvironmentFile(filePath);
+      this.loadEnvironment(filePath);
       this.loadedFiles.push(baseName);
 
       logger.info(`Successfully loaded environment file: ${baseName}`);
@@ -127,7 +127,7 @@ export class EnvironmentSetup {
     }
   }
 
-  private loadEnvironmentFile(filePath: string): void {
+  private loadEnvironment(filePath: string): void {
     try {
       const result = dotenv.config({ path: filePath, override: true });
 

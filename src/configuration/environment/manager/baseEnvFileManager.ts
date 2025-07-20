@@ -11,37 +11,6 @@ export default class BaseEnvFileManager {
   public static readonly BASE_ENV_FILE = BaseEnvironmentFilePath;
 
   /**
-   * Checks if the base environment file exists
-   * @param baseEnvFilePath - Path to the base environment file
-   * @returns Promise resolving to true if file exists, false otherwise
-   */
-  public static async doesBaseEnvFileExist(): Promise<boolean> {
-    return FileManager.doesFileExist(this.BASE_ENV_FILE);
-  }
-
-  /**
-   * Handles missing base environment file by logging appropriate warnings
-   * Skips warnings during key generation operations
-   */
-  public static handleMissingBaseEnvFile(): void {
-    const isGeneratingKey = (process.env.PLAYWRIGHT_GREP || "").includes("@full-encryption");
-
-    // Skip check entirely if generating/storing secret keys
-    if (isGeneratingKey) {
-      return;
-    }
-
-    // For all other operations, warn but continue working
-    const warningMessage = [
-      `Base environment file not found at: ${this.BASE_ENV_FILE}.`,
-      `Expected location based on configuration: ${this.BASE_ENV_FILE}.`,
-      `You can create base environment file by running encryption`,
-    ].join("\n");
-
-    logger.warn(warningMessage);
-  }
-
-  /**
    * Reads content from the base environment file or creates it if it doesn't exist
    * @returns Promise resolving to the file content as string
    */
@@ -236,5 +205,36 @@ export default class BaseEnvFileManager {
     logger.debug(`Key "${keyName}" not found, added to end of file`);
 
     return updatedContent;
+  }
+
+  /**
+   * Checks if the base environment file exists
+   * @param baseEnvFilePath - Path to the base environment file
+   * @returns Promise resolving to true if file exists, false otherwise
+   */
+  public static async doesBaseEnvFileExist(): Promise<boolean> {
+    return FileManager.doesFileExist(this.BASE_ENV_FILE);
+  }
+
+  /**
+   * Handles missing base environment file by logging appropriate warnings
+   * Skips warnings during key generation operations
+   */
+  public static handleMissingBaseEnvFile(): void {
+    const isGeneratingKey = (process.env.PLAYWRIGHT_GREP || "").includes("@full-encryption");
+
+    // Skip check entirely if generating/storing secret keys
+    if (isGeneratingKey) {
+      return;
+    }
+
+    // For all other operations, warn but continue working
+    const warningMessage = [
+      `Base environment file not found at: ${this.BASE_ENV_FILE}.`,
+      `Expected location based on configuration: ${this.BASE_ENV_FILE}.`,
+      `You can create base environment file by running encryption`,
+    ].join("\n");
+
+    logger.warn(warningMessage);
   }
 }

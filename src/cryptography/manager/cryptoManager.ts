@@ -446,7 +446,6 @@ export class CryptoManager {
     }
   }
 
-  // Prepare data for HMAC computation
   public static prepareHMACData(salt: string, iv: string, cipherText: string): Buffer {
     return Buffer.concat([
       Buffer.from(salt, FileEncoding.BASE64),

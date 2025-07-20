@@ -196,48 +196,6 @@ export class EncryptionManager {
   }
 
   /**
-   * Extracts the encrypted data without the prefix.
-   * Returns null if the value is not encrypted.
-   */
-  // private extractEncryptedValue(value: string): string | null {
-  //   if (!value?.startsWith(SECURITY_CONSTANTS.FORMAT.PREFIX)) {
-  //     return null;
-  //   }
-  //   return value.substring(SECURITY_CONSTANTS.FORMAT.PREFIX.length);
-  // }
-
-  /**
-   * Parses an encrypted value in the format: salt:iv:cipherText
-   * @throws Error if the format is invalid
-   */
-  // public parseEncryptedValue(encryptedValue: string): {
-  //   salt: string;
-  //   iv: string;
-  //   cipherText: string;
-  // } {
-  //   if (!encryptedValue) {
-  //     throw new Error("Encrypted value cannot be empty");
-  //   }
-
-  //   const parts = encryptedValue.split(":");
-  //   if (parts.length !== SECURITY_CONSTANTS.FORMAT.EXPECTED_PARTS) {
-  //     throw new Error(
-  //       `Invalid encrypted value format. Expected: salt:iv:cipherText, got ${parts.length} parts`,
-  //     );
-  //   }
-
-  //   const [salt, iv, cipherText] = parts;
-
-  //   if (!salt || !iv || !cipherText) {
-  //     throw new Error(
-  //       "Invalid encrypted value: all parts (salt, iv, cipherText) must be non-empty",
-  //     );
-  //   }
-
-  //   return { salt, iv, cipherText };
-  // }
-
-  /**
    * Logs the summary of the encryption process.
    */
   private async logEncryptionSummary(
