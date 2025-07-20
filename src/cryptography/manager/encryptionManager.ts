@@ -7,7 +7,7 @@ import type { EnvironmentStage } from "../../configuration/types/environment/env
 import {
   EnvironmentFilePaths,
   SecretKeyVariables,
-} from "../../configuration/types/environment/environment.constants";
+} from "../../configuration/constants/environment/environment.constants";
 import ErrorHandler from "../../utils/errorHandling/errorHandler";
 import logger from "../../utils/logger/loggerManager";
 

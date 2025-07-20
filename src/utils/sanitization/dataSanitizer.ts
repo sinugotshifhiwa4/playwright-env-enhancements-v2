@@ -74,7 +74,13 @@ export default class DataSanitizer {
       const sanitizedArray: unknown[] = [];
       for (let i = 0; i < data.length; i++) {
         const itemPath = `${path}[${i}]`;
-        const sanitizedItem = this.processValue(data[i], config, depth + 1, seen, itemPath);
+        const sanitizedItem = this.processValue(
+          data[i],
+          config,
+          depth + 1,
+          seen,
+          itemPath,
+        ) as unknown;
         sanitizedArray.push(sanitizedItem);
       }
       return sanitizedArray as unknown as T;

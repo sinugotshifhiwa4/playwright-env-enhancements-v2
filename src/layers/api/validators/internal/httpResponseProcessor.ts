@@ -188,7 +188,7 @@ export default class HttpResponseProcessor {
    */
   public static validateHttpStatus(response: AxiosResponse): void {
     if (response.status >= 400) {
-      const errorData = response.data ?? {};
+      const errorData = (response.data as { code?: string; type?: string; message?: string }) ?? {};
       const {
         code = "UNKNOWN_CODE",
         type = "UNKNOWN_TYPE",
@@ -202,7 +202,7 @@ export default class HttpResponseProcessor {
         statusText: response.statusText,
         code,
         type,
-        responseData: response.data,
+        responseData: response.data as unknown,
         headers: response.headers,
       });
 
@@ -215,7 +215,7 @@ export default class HttpResponseProcessor {
         message: errorMessage,
         endpoint: response.config?.url,
         method: response.config?.method?.toUpperCase(),
-        fullResponse: response.data,
+        fullResponse: response.data as unknown,
       });
 
       throw detailedError;

@@ -1,5 +1,5 @@
 import FileManager from "../../../utils/fileManager/fileManager";
-import { BaseEnvironmentFilePath } from "../../types/environment/environment.constants";
+import { BASE_ENV_FILE_PATH } from "../../constants/environment/environment.constants";
 import { FileEncoding } from "../../../utils/types/fileManager/file-encoding.enum";
 import ErrorHandler from "../../../utils/errorHandling/errorHandler";
 import logger from "../../../utils/logger/loggerManager";
@@ -8,7 +8,7 @@ import logger from "../../../utils/logger/loggerManager";
  * Manages base environment file operations including reading, writing, and updating base environment variables
  */
 export default class BaseEnvFileManager {
-  public static readonly BASE_ENV_FILE = BaseEnvironmentFilePath;
+  public static readonly BASE_ENV_FILE = BASE_ENV_FILE_PATH;
 
   /**
    * Reads content from the base environment file or creates it if it doesn't exist

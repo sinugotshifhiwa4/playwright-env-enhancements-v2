@@ -3,7 +3,7 @@ import EnvironmentDetector from "../detector/environmentDetector";
 import path from "path";
 import BaseEnvFileManager from "./baseEnvFileManager";
 import StageEnvFileManager from "./stageEnvFileManager";
-import { EnvironmentFilePaths } from "../../types/environment/environment.constants";
+import { EnvironmentFilePaths } from "../../constants/environment/environment.constants";
 import ErrorHandler from "../../../utils/errorHandling/errorHandler";
 import type { EnvironmentStage } from "../../types/environment/environment.types";
 import logger from "../../../utils/logger/loggerManager";
