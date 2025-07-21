@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import PathUtils from "./pathUtils";
 import { FileOperationOptions, FileOperationResult } from "../types/fileManager/File-manager.types";
 import { FileEncoding } from "../types/fileManager/file-encoding.enum";
 import ErrorHandler from "../errorHandling/errorHandler";
@@ -14,24 +15,6 @@ export default class FileManager {
   };
 
   /**
-   * Checks if a path exists (file or directory)
-   * @param targetPath - Path to check
-   * @returns Promise resolving to boolean indicating existence
-   */
-  public static async pathExists(targetPath: string): Promise<boolean> {
-    targetPath = this.normalizePath(targetPath);
-    this.validatePath(targetPath, "targetPath");
-
-    try {
-      await fs.promises.access(targetPath, fs.constants.F_OK);
-      return true;
-    } catch {
-      logger.debug(`Path does not exist: ${this.getRelativePath(targetPath)}`);
-      return false;
-    }
-  }
-
-  /**
    * Creates directory structure recursively
    */
   public static async createDirectory(
@@ -39,12 +22,12 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    dirPath = this.normalizePath(dirPath);
-    this.validatePath(dirPath, "dirPath");
+    dirPath = PathUtils.normalize(dirPath);
+    PathUtils.validate(dirPath, "dirPath");
 
     try {
       await fs.promises.mkdir(dirPath, { recursive: true });
-      logger.debug(`Created directory: ${this.getRelativePath(dirPath)}`);
+      logger.debug(`Created directory: ${PathUtils.resolvePath(dirPath)}`);
       return { success: true };
     } catch (error) {
       ErrorHandler.captureError(error, "createDirectory", `Failed to create directory: ${dirPath}`);
@@ -67,8 +50,8 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    filePath = this.normalizePath(filePath);
-    this.validatePath(filePath, "filePath");
+    filePath = PathUtils.normalize(filePath);
+    PathUtils.validate(filePath, "filePath");
 
     try {
       // First ensure parent directory exists
@@ -83,7 +66,7 @@ export default class FileManager {
       const fileHandle = await fs.promises.open(filePath, "a");
       await fileHandle.close();
 
-      logger.debug(`Created file: ${this.getRelativePath(filePath)}`);
+      logger.debug(`Created file: ${PathUtils.resolvePath(filePath)}`);
       return { success: true };
     } catch (error) {
       ErrorHandler.captureError(error, "createFile", `Failed to create file: ${filePath}`);
@@ -100,6 +83,64 @@ export default class FileManager {
   }
 
   /**
+   * Checks if a directory exists
+   *
+   * @param dirPath - Path to the directory
+   * @returns Promise resolving to boolean indicating existence
+   */
+  public static async doesDirectoryExist(dirPath: string): Promise<boolean> {
+    dirPath = PathUtils.normalize(dirPath);
+    PathUtils.validate(dirPath, "dirPath");
+
+    try {
+      const stats = await fs.promises.stat(dirPath);
+      return stats.isDirectory();
+    } catch {
+      logger.debug(`Directory does not exist: ${PathUtils.resolvePath(dirPath)}`);
+      return false;
+    }
+  }
+
+  public static async ensureDirectoryExist(dirPath: string): Promise<FileOperationResult> {
+    const exist = await this.doesDirectoryExist(dirPath);
+
+    if (!exist) {
+      return this.createDirectory(dirPath);
+    }
+
+    return { success: true };
+  }
+
+  /**
+   * Checks if a file exists
+   *
+   * @param filePath - Path to the file
+   * @returns Promise resolving to boolean indicating existence
+   */
+  public static async doesFileExist(filePath: string): Promise<boolean> {
+    filePath = PathUtils.normalize(filePath);
+    PathUtils.validate(filePath, "filePath");
+
+    try {
+      const stats = await fs.promises.stat(filePath);
+      return stats.isFile();
+    } catch {
+      logger.debug(`File does not exist: ${path.basename(filePath)}`);
+      return false;
+    }
+  }
+
+  public static async ensureFileExist(filePath: string): Promise<FileOperationResult> {
+    const exist = await this.doesFileExist(filePath);
+
+    if (!exist) {
+      return this.createFile(filePath);
+    }
+
+    return { success: true };
+  }
+
+  /**
    * Deletes a file
    */
   public static async deleteFile(
@@ -107,12 +148,12 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    filePath = this.normalizePath(filePath);
-    this.validatePath(filePath, "filePath");
+    filePath = PathUtils.normalize(filePath);
+    PathUtils.validate(filePath, "filePath");
 
     try {
       await fs.promises.unlink(filePath);
-      logger.debug(`Deleted file: ${this.getRelativePath(filePath)}`);
+      logger.debug(`Deleted file: ${PathUtils.resolvePath(filePath)}`);
       return { success: true };
     } catch (error) {
       ErrorHandler.captureError(error, "deleteFile", `Failed to delete file: ${filePath}`);
@@ -135,12 +176,12 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    dirPath = this.normalizePath(dirPath);
-    this.validatePath(dirPath, "dirPath");
+    dirPath = PathUtils.normalize(dirPath);
+    PathUtils.validate(dirPath, "dirPath");
 
     try {
       await fs.promises.rmdir(dirPath, { recursive: true });
-      logger.debug(`Deleted directory: ${this.getRelativePath(dirPath)}`);
+      logger.debug(`Deleted directory: ${PathUtils.resolvePath(dirPath)}`);
       return { success: true };
     } catch (error) {
       ErrorHandler.captureError(error, "deleteDirectory", `Failed to delete directory: ${dirPath}`);
@@ -173,10 +214,10 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    filePath = this.normalizePath(filePath);
+    filePath = PathUtils.normalize(filePath);
 
     try {
-      this.validatePath(filePath, "filePath");
+      PathUtils.validate(filePath, "filePath");
 
       if (content === undefined || content === null) {
         const error = new Error(`No content provided for file: ${keyName}`);
@@ -209,7 +250,7 @@ export default class FileManager {
 
       await fs.promises.writeFile(filePath, content, { encoding });
 
-      logger.debug(`Successfully wrote file: ${this.getRelativePath(filePath)}`);
+      logger.debug(`Successfully wrote file: ${PathUtils.resolvePath(filePath)}`);
       return { success: true };
     } catch (error) {
       ErrorHandler.captureError(error, "writeFile", `Failed to write file: ${filePath}`);
@@ -234,12 +275,12 @@ export default class FileManager {
     filePath: string,
     encoding: FileEncoding = FileEncoding.UTF8,
   ): Promise<string> {
-    filePath = this.normalizePath(filePath);
-    this.validatePath(filePath, "filePath");
+    filePath = PathUtils.normalize(filePath);
+    PathUtils.validate(filePath, "filePath");
 
     try {
       const content = await fs.promises.readFile(filePath, { encoding });
-      logger.debug(`Successfully loaded file: ${this.getRelativePath(filePath)}`);
+      logger.debug(`Successfully loaded file: ${PathUtils.resolvePath(filePath)}`);
       return content.toString();
     } catch (error) {
       ErrorHandler.captureError(error, "readFile", `Failed to read file: ${filePath}`);
@@ -260,8 +301,8 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    filePath = this.normalizePath(filePath);
-    this.validatePath(filePath, "filePath");
+    filePath = PathUtils.normalize(filePath);
+    PathUtils.validate(filePath, "filePath");
 
     try {
       await fs.promises.access(filePath, mode);
@@ -299,8 +340,8 @@ export default class FileManager {
     >
   > {
     const opts = { ...this.DEFAULT_OPTIONS, includeStats: false, recursive: false, ...options };
-    dirPath = this.normalizePath(dirPath);
-    this.validatePath(dirPath, "dirPath");
+    dirPath = PathUtils.normalize(dirPath);
+    PathUtils.validate(dirPath, "dirPath");
 
     try {
       const entries = await fs.promises.readdir(dirPath, { withFileTypes: true });
@@ -374,128 +415,6 @@ export default class FileManager {
   }
 
   /**
-   * Gets file extension (including the dot)
-   */
-  public static getFileExtension(filePath: string): string {
-    return path.extname(filePath);
-  }
-
-  /**
-   * Gets filename without extension
-   */
-  public static getBaseName(filePath: string): string {
-    return path.basename(filePath, path.extname(filePath));
-  }
-
-  /**
-   * Joins multiple path segments safely
-   */
-  public static joinPath(...segments: string[]): string {
-    if (segments.length === 0) {
-      throw new Error("At least one path segment is required");
-    }
-
-    const joined = path.join(...segments);
-    return this.normalizePath(joined);
-  }
-
-  /**
-   * Normalizes a path with security checks
-   *
-   * @param inputPath - The path to normalize
-   * @returns Normalized absolute path
-   */
-  public static normalizePath(inputPath: string): string {
-    if (!inputPath) {
-      throw new Error("Path cannot be empty");
-    }
-
-    // Security: Check for null bytes (potential path traversal attack)
-    if (inputPath.indexOf("\0") !== -1) {
-      throw new Error("Path contains null bytes");
-    }
-
-    const normalizedPath = path.normalize(inputPath);
-
-    // Convert to absolute path
-    const absolutePath = path.resolve(normalizedPath);
-
-    // Additional security check to prevent path traversal
-    const cwd = process.cwd();
-    if (!absolutePath.startsWith(cwd) && !path.isAbsolute(inputPath)) {
-      throw new Error("Path traversal attempt detected");
-    }
-
-    return absolutePath;
-  }
-
-  /**
-   * Gets a relative path from the current working directory
-   *
-   * @param absolutePath - The absolute path to convert
-   * @returns Relative path from current working directory
-   */
-  public static getRelativePath(absolutePath: string): string {
-    return path.relative(process.cwd(), absolutePath);
-  }
-
-  /**
-   * Validates path parameters
-   *
-   * @param filePath - Path to validate
-   * @param paramName - Parameter name for error messages
-   */
-  private static validatePath(filePath: string, paramName: string = "path"): void {
-    if (!filePath) {
-      const message = `Invalid arguments: '${paramName}' is required.`;
-      ErrorHandler.logAndThrow(message, "validatePath");
-    }
-
-    if (paramName === "filePath" && (filePath.endsWith("/") || filePath.endsWith("\\"))) {
-      const message = `Invalid file path: '${filePath}' cannot end with a directory separator.`;
-      ErrorHandler.logAndThrow(message, "validatePath");
-    }
-  }
-
-  /**
-   * Checks if a directory exists
-   *
-   * @param dirPath - Path to the directory
-   * @returns Promise resolving to boolean indicating existence
-   */
-  public static async doesDirectoryExist(dirPath: string): Promise<boolean> {
-    dirPath = this.normalizePath(dirPath);
-    this.validatePath(dirPath, "dirPath");
-
-    try {
-      const stats = await fs.promises.stat(dirPath);
-      return stats.isDirectory();
-    } catch {
-      logger.debug(`Directory does not exist: ${this.getRelativePath(dirPath)}`);
-      return false;
-    }
-  }
-
-  /**
-   * Checks if a file exists
-   *
-   * @param filePath - Path to the file
-   * @returns Promise resolving to boolean indicating existence
-   */
-  public static async doesFileExist(filePath: string): Promise<boolean> {
-    filePath = this.normalizePath(filePath);
-    this.validatePath(filePath, "filePath");
-
-    try {
-      const stats = await fs.promises.stat(filePath);
-      return stats.isFile();
-    } catch {
-      logger.debug(`File does not exist: ${path.basename(filePath)}`);
-      return false;
-    }
-  }
-
-  /**
    * Gets file stats
    *
    * @param filePath - Path to the file
@@ -507,10 +426,10 @@ export default class FileManager {
     options?: Partial<FileOperationOptions>,
   ): Promise<FileOperationResult<fs.Stats>> {
     const opts = { ...this.DEFAULT_OPTIONS, ...options };
-    filePath = this.normalizePath(filePath);
+    filePath = PathUtils.normalize(filePath);
 
     try {
-      this.validatePath(filePath, "filePath");
+      PathUtils.validate(filePath, "filePath");
       const stats = await fs.promises.stat(filePath);
       return { success: true, data: stats };
     } catch (error) {
@@ -524,14 +443,6 @@ export default class FileManager {
         error: error instanceof Error ? error : new Error(String(error)),
       };
     }
-  }
-
-  public static getFilePath(filePath: string): string {
-    if (!filePath?.trim()) {
-      throw new Error("File path cannot be null, undefined, or empty");
-    }
-
-    return filePath;
   }
 
   /**

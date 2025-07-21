@@ -3,7 +3,7 @@ import moment from "moment-timezone";
 import path from "path";
 import fs from "fs";
 import { winstonLoggerConfig } from "../types/logger/logger.config";
-import type { EnvironmentStage } from "../../configuration/types/environment/environment.types";
+import type { EnvironmentStage } from "../../configuration/environment/dotenv/environment.types";
 
 export default class LoggerFactory {
   public static createLogger(loggingDir: string): winston.Logger {

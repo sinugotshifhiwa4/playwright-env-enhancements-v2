@@ -3,11 +3,11 @@ import EnvironmentDetector from "../../configuration/environment/detector/enviro
 import StageEnvFileManager from "../../configuration/environment/manager/stageEnvFileManager";
 import path from "path";
 import { SECURITY_CONSTANTS } from "../types/security.constant";
-import type { EnvironmentStage } from "../../configuration/types/environment/environment.types";
+import type { EnvironmentStage } from "../../configuration/environment/dotenv/environment.types";
 import {
   EnvironmentFilePaths,
   SecretKeyVariables,
-} from "../../configuration/constants/environment/environment.constants";
+} from "../../configuration/environment/dotenv/environmentFileMap";
 import ErrorHandler from "../../utils/errorHandling/errorHandler";
 import logger from "../../utils/logger/loggerManager";
 
@@ -133,7 +133,9 @@ export class EncryptionManager {
     }
 
     if (filteredOutVariables.length > 0) {
-      logger.info(`Skipped encrypted variables: ${filteredOutVariables.join(", ")}`);
+      logger.info(
+        `The following variables were selected for encryption but appear to be already encrypted — skipping: ${filteredOutVariables.join(", ")}`,
+      );
     }
 
     return variablesToEncrypt;

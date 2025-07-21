@@ -1,5 +1,5 @@
-import { isEnvironmentStage } from "../../types/environment/environment.types";
-import type { EnvironmentStage } from "../../types/environment/environment.types";
+import { isEnvironmentStage } from "../dotenv/environment.types";
+import type { EnvironmentStage } from "../dotenv/environment.types";
 
 export default class EnvironmentDetector {
   /**
